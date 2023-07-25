@@ -18,12 +18,6 @@ const app = express();
 
 app.use(express.json());
 dotenv.config();
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Headers", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "*");
-//   next();
-// });
 
 app.use(cors())
 app.use("/api/auth", authRoutes);

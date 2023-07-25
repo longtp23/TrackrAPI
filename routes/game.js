@@ -4,6 +4,7 @@ import {
   addOneGame,
   changeGameStatus,
   deleteGame,
+  editGame,
   gameFilter,
   getGameNumbers,
   getGameTitles,
@@ -21,6 +22,8 @@ import {verifyTokenAndAdmin} from "../utils/verifyTokens.js"
 const router = express.Router();
 
 router.post("/", addGames);
+
+router.put("/edit/:gameId", verifyTokenAndAdmin, editGame)
 
 router.post("/addOneGame", verifyTokenAndAdmin, addOneGame)
 

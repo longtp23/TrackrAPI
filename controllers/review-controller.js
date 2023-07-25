@@ -160,3 +160,37 @@ export const editReply = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+export const filterReviews = async (req, res) => {
+  const reviewsPerPage = parseInt(req.query.reviewsPerPage);
+  const page = parseInt(req.query.page);
+  const { ratings, helpful, timePosted } = req.body;
+  try {
+    let query = {};
+
+    if (ratings && ratings.length > 0) {
+      query.rating = { $in: ratings };
+    }
+
+    if (helpful === 'helpful') {
+      query.helpful = { $elemMatch: { type: 'helpful' } };
+    }
+
+    if (helpful === 'notHelpful') {
+      query.helpful = { $elemMatch: { type: 'notHelpful' } };
+    }
+
+    const sortDirection = timePosted === 'latest' ? -1 : 1;
+    const reviews = await Review.aggregate([
+      { $match: query },
+      { $sort: { 'helpful.length': helpful === 'helpful' ? -1 : 1, timeStamp: sortDirection } },
+      { $skip: (page - 1) * reviewsPerPage },
+      { $limit: reviewsPerPage }
+    ]);
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};

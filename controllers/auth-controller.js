@@ -38,14 +38,18 @@ export const login = async (req, res) => {
       return res.status(200).json({type:"error", message: "User not found" });
     }
 
+    
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
-    );
-    if (!validPassword) {
-      return res.status(200).json({type:"error", message: "Wrong Credentials" });
-    }
+      );
+      if (!validPassword) {
+        return res.status(200).json({type:"error", message: "Wrong Credentials" });
+      }
 
+      
+      if(user.isDisabled) return res.status(200).json({type:"error", message:"Your account has been disabled"})
+      
     const accessToken = jwt.sign(
       {
         id: user._id,

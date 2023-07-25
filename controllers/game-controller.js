@@ -30,11 +30,15 @@ export const addGames = async (req, res) => {
 
 export const addOneGame = async (req, res) => {
   try {
+
+    const existingGame = await Game.findOne({slug: req.body.slug})
+    if(existingGame) return res.status(200).json({type:"error", message:"Slug existed!"})
+
     const newGame = new Game({
       title: req.body.title,
       slug: req.body.slug,
       releaseDate: req.body.releaseDate,
-      platforms: req.body.platforms,
+    platforms: req.body.platforms,
       genres: req.body.genres,
       developers: req.body.developers,
       publishers: req.body.publishers,
@@ -167,7 +171,6 @@ export const gameFilter = async (req, res) => {
   }
 };
 
-
 export const searchGameBySlug = async (req, res) => {
   const slug = req.params.slug;
   try {
@@ -277,6 +280,33 @@ export const changeGameStatus = async (req, res) => {
     res
       .status(200)
       .json({ type: "success", message: "Game's Status Updated!" });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const editGame = async (req, res) => {
+  try {
+    const {
+      title,
+      releaseDate,
+      metaScore,
+      developers,
+      publishers,
+      genres,
+      platforms,
+    } = req.body;
+    const gameId = req.params.gameId;
+    const game = await Game.findById(gameId);
+    game.title = title;
+    game.releaseDate = releaseDate;
+    game.metaScore = metaScore;
+    game.developers = developers;
+    game.publishers = publishers;
+    game.genres = genres;
+    game.platforms = platforms;
+    await game.save();
+    res.status(200).json({ type: "success", message: "Game Updated!" });
   } catch (error) {
     res.status(500).json(error);
   }
