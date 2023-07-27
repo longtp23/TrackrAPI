@@ -114,12 +114,23 @@ export const searchGame = async (req, res) => {
 };
 
 export const gameFilter = async (req, res) => {
-  const { platforms, genres, price } = req.body;
+  const { platforms, genres, price, searchQuery } = req.body;
   const userId = req.query.userId;
   const page = parseInt(req.query.page);
   const gamesPerPage = parseInt(req.query.gamesPerPage);
 
   let query = {};
+
+
+  if (searchQuery) {
+    query.$or = [
+      { title: { $regex: new RegExp(searchQuery, "i") } },
+      { platforms: { $regex: new RegExp(searchQuery, "i") } },
+      { genres: { $regex: new RegExp(searchQuery, "i") } },
+      { publishers: { $regex: new RegExp(searchQuery, "i") } },
+      { developers: { $regex: new RegExp(searchQuery, "i") } },
+    ];
+  }
 
   if (userId) {
     const user = await User.findById(userId);

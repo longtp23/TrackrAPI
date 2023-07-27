@@ -50,8 +50,8 @@ export const getUserInfo = async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await User.findById(userId);
-    const { username, email } = user;
-    res.status(200).json({ username, email });
+    const { username, email, profilePicture } = user;
+    res.status(200).json({ username, email, profilePicture });
   } catch (error) {
     res.status(500).json(error);
   }
