@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyTokenAndAuthorization } from "../utils/verifyTokens.js";
-import { addReview, editReply, editReview, filterReviews, getReviewCount, getReviews, getReviewsByGame, getReviewsNumbers, getUserReviews, isHelpful, reply } from "../controllers/review-controller.js";
+import { addReview, deleteReview, editReply, editReview, filterReviews, getReviewCount, getReviews, getReviewsByGame, getReviewsNumbers, getUserReviews, isHelpful, reply } from "../controllers/review-controller.js";
 
 const router = express.Router();
 
@@ -26,4 +26,5 @@ router.put("/reply/:reviewId",verifyTokenAndAuthorization, reply)
 
 router.put("/reply/edit/:reviewId", verifyTokenAndAuthorization, editReply)
 
+router.delete("/delete/:reviewId", verifyTokenAndAuthorization, deleteReview)
 export default router;

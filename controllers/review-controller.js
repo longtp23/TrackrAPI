@@ -172,25 +172,41 @@ export const filterReviews = async (req, res) => {
       query.rating = { $in: ratings };
     }
 
-    if (helpful === 'helpful') {
-      query.helpful = { $elemMatch: { type: 'helpful' } };
+    if (helpful === "helpful") {
+      query.helpful = { $elemMatch: { type: "helpful" } };
     }
 
-    if (helpful === 'notHelpful') {
-      query.helpful = { $elemMatch: { type: 'notHelpful' } };
+    if (helpful === "notHelpful") {
+      query.helpful = { $elemMatch: { type: "notHelpful" } };
     }
 
-    const sortDirection = timePosted === 'latest' ? -1 : 1;
+    const sortDirection = timePosted === "latest" ? -1 : 1;
     const reviews = await Review.aggregate([
       { $match: query },
-      { $sort: { 'helpful.length': helpful === 'helpful' ? -1 : 1, timeStamp: sortDirection } },
+      {
+        $sort: {
+          "helpful.length": helpful === "helpful" ? -1 : 1,
+          timeStamp: sortDirection,
+        },
+      },
       { $skip: (page - 1) * reviewsPerPage },
-      { $limit: reviewsPerPage }
+      { $limit: reviewsPerPage },
     ]);
 
     res.status(200).json(reviews);
   } catch (error) {
     console.log(error);
+    res.status(500).json(error);
+  }
+};
+
+export const deleteReview = async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const userId = req.query.userId;
+    await Review.findByIdAndDelete(reviewId);
+    res.status(200).json({ type: "success", message: "Review deleted" });
+  } catch (error) {
     res.status(500).json(error);
   }
 };
