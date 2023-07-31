@@ -191,7 +191,8 @@ export const filterPrice = async (req, res) => {
         if (
           gameCopy &&
           gameCopy.retailPrice.length > 0 &&
-          gameCopy.retailPrice[0].price <= 500000
+          gameCopy.retailPrice[0].price <= 500000 &&
+          !gameCopy.isDisabled
         ) {
           return res.status(200).json({ message: true });
         }
@@ -203,7 +204,8 @@ export const filterPrice = async (req, res) => {
         if (
           gameCopy &&
           gameCopy.retailPrice.length > 0 &&
-          500000 <= gameCopy.retailPrice[0].price <= 1000000
+          500000 <= gameCopy.retailPrice[0].price <= 1000000 &&
+          !gameCopy.isDisabled
         ) {
           return res.status(200).json({ message: true });
         }
@@ -215,7 +217,8 @@ export const filterPrice = async (req, res) => {
         if (
           gameCopy &&
           gameCopy.retailPrice.length > 0 &&
-          1000000 <= gameCopy.retailPrice[0].price <= 1400000
+          1000000 <= gameCopy.retailPrice[0].price <= 1400000 &&
+          !gameCopy.isDisabled
         ) {
           return res.status(200).json({ message: true });
         }
@@ -227,7 +230,8 @@ export const filterPrice = async (req, res) => {
         if (
           gameCopy &&
           gameCopy.retailPrice.length > 0 &&
-          gameCopy.retailPrice[0].price >= 1400000
+          gameCopy.retailPrice[0].price >= 1400000 &&
+          !gameCopy.isDisabled
         ) {
           return res.status(200).json({ message: true });
         }
