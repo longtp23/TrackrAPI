@@ -46,9 +46,19 @@ export const searchGameCopiesByName = async (req, res) => {
 
     let query = { title: { $regex: regexPattern }, isDisabled: { $ne: true } };
 
+    // if (storeName) {
+    //   query.storeName = storeName;
+    // } else {
+    //   query.storeName = { $nin: ["Lazada", "Tiki"] };
+    // }
+
     if (storeName) {
-      query.storeName = storeName;
+      if (storeName !== "all") {
+        query.storeName = storeName;
+      } else {
+      }
     } else {
+      // If storeName is not provided, set the default storeName filter
       query.storeName = { $nin: ["Lazada", "Tiki"] };
     }
 
@@ -78,7 +88,8 @@ export const searchGameCopiesBestPrice = async (req, res, title) => {
     const regexPattern = new RegExp(escapedTitle.replace(/:/g, ":?"), "i");
 
     const gameCopies = await GameCopy.find({
-      title: { $regex: regexPattern }, isDisabled: { $ne: true },
+      title: { $regex: regexPattern },
+      isDisabled: { $ne: true },
     });
     const sortedGameCopies = gameCopies.sort(
       (a, b) => a.retailPrice[0].price - b.retailPrice[0].price
