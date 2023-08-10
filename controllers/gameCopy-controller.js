@@ -55,10 +55,8 @@ export const searchGameCopiesByName = async (req, res) => {
     if (storeName) {
       if (storeName !== "all") {
         query.storeName = storeName;
-      } else {
       }
     } else {
-      // If storeName is not provided, set the default storeName filter
       query.storeName = { $nin: ["Lazada", "Tiki"] };
     }
 
